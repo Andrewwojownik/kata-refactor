@@ -4,19 +4,32 @@ namespace App;
 
 final class Item
 {
+    public const NAME_AGED_BRIE = 'Aged Brie';
+    public const NAME_SULFURAS = 'Sulfuras, Hand of Ragnaros';
+    public const NAME_BACKSTAGE_PASSES = 'Backstage passes to a TAFKAL80ETC concert';
+
+    /**
+     * @var string
+     */
     public $name;
-    public $sell_in;
+    /**
+     * @var int
+     */
+    public $sellInDays;
+    /**
+     * @var int
+     */
     public $quality;
 
-    function __construct($name, $sell_in, $quality)
+    function __construct(string $name, int $sellIn, int $quality)
     {
         $this->name = $name;
-        $this->sell_in = $sell_in;
+        $this->sellInDays = $sellIn;
         $this->quality = $quality;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return "{$this->name}, {$this->sell_in}, {$this->quality}";
+        return "{$this->name}, {$this->sellInDays}, {$this->quality}";
     }
 }

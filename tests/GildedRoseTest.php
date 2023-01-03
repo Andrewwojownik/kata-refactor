@@ -3,9 +3,24 @@
 use App\GildedRose;
 use App\Item;
 use PHPUnit\Framework\TestCase;
+use \App\ItemsQualityConfig;
 
 class GildedRoseTest extends TestCase
 {
+    /**
+     * @var ItemsQualityConfig
+     */
+    private static $ItemsQualityConfig;
+
+    public static function setUpBeforeClass(): void
+    {
+        self::$ItemsQualityConfig = new ItemsQualityConfig([
+            Item::NAME_AGED_BRIE => \App\ItemsQualityStrategy\AgedBrieStrategy::class,
+            Item::NAME_SULFURAS => \App\ItemsQualityStrategy\SulfurasStrategy::class,
+            Item::NAME_BACKSTAGE_PASSES => \App\ItemsQualityStrategy\BackstagePassesStrategy::class,
+        ]);
+    }
+
     /**
      * @dataProvider itemsProvider
      * @param string $name
@@ -14,14 +29,14 @@ class GildedRoseTest extends TestCase
      * @param int $expectedSellIn
      * @param int $expectedQuality
      */
-    public function testUpdateQualityTest($name, $sellIn, $quality, $expectedSellIn, $expectedQuality): void
+    public function testUpdateQualityTest(string $name, int $sellIn, int $quality, int $expectedSellIn, int $expectedQuality): void
     {
         $item = new Item($name, $sellIn, $quality);
 
-        $gildedRose = new GildedRose();
+        $gildedRose = new GildedRose(self::$ItemsQualityConfig);
         $gildedRose->updateQuality($item);
 
-        $this->assertEquals($expectedSellIn, $item->sell_in);
+        $this->assertEquals($expectedSellIn, $item->sellInDays);
         $this->assertEquals($expectedQuality, $item->quality);
     }
 
